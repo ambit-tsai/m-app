@@ -1,0 +1,16 @@
+.app {
+    text-align: center;
+}
+.logo {
+    display: inline-block;
+}
+.logo > img {
+    width: 150px;
+    height: 150px;
+}
+.links {
+    margin-bottom: 16px;
+}
+.links > a + a {
+    margin-left: 16px;
+}

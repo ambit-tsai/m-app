@@ -1,0 +1,7 @@
+node_modules/
+docs/
+test/
+scripts/
+src/
+.gitignore
+.vscode/
