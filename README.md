@@ -57,6 +57,7 @@ import 'm-app';
 ```html
 <script src="path/to/m-app.js"></script>
 ```
+更多信息请查看 <a href="https://github.com/ambit-tsai/m-app/wiki" target="_blank">Wiki</a>
 
 
 ## ☎️ 联系
