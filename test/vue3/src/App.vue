@@ -107,6 +107,9 @@ provide('appList', appList);
 .el-main {
     overflow: auto;
 }
+:global(m-app) {
+    height: 100%;
+}
 </style>
 <style>
 @keyframes title {

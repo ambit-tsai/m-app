@@ -5,7 +5,7 @@ module.exports = {
     ...sharedOptions,
 
     server: {
-        port: 8000,
+        port: 8009,
         open: true,
         proxy: {
             '/react/': {

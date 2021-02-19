@@ -72,10 +72,11 @@ function setup(props, { emit }) {
         entry: [{ required: true, trigger: 'blur' }],
         route: [
             { required: true, trigger: 'blur' },
-            { validator: (_, value) => /^\/\w+\/$/.test(value), message: 'format: /URL/pathname/' },
+            { validator: (_, value) => /^\/(\w+\/)+$/.test(value), message: 'format: /URL/pathname/' },
         ],
         fetchOption: [{
             validator(_, value) {
+                if (!value) return true;
                 try {
                     const obj = eval(`(${value})`);
                     return obj && typeof obj === 'object';
@@ -107,6 +108,7 @@ function setup(props, { emit }) {
             });
             hideRecord();
         } catch (error) {
+            console.warn(error);
         }
     };
 
