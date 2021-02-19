@@ -2,10 +2,10 @@
     <Drawer title="Manage Micro App" v-model="showAppTable" size="800px">
         <Table :data="appList" stripe>
             <TableColumn type="index" align="center" />
-            <TableColumn label="Name" prop="name" width="150px" />
-            <TableColumn label="Route" prop="route" width="100px" />
-            <TableColumn label="Entry" prop="entry" />
-            <TableColumn label="Icon" prop="icon" width="130px" />
+            <TableColumn label="Name" prop="name" align="center" width="150px" />
+            <TableColumn label="Route" prop="route" align="center" width="100px" />
+            <TableColumn label="Entry" prop="entry" align="center" />
+            <TableColumn label="Icon" prop="icon" align="center" width="130px" />
             <TableColumn align="center" width="100px">
                 <template #header>
                     <Button

@@ -106,7 +106,6 @@ provide('appList', appList);
 }
 .el-main {
     overflow: auto;
-    position: relative;
 }
 </style>
 <style>

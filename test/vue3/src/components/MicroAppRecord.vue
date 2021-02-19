@@ -15,7 +15,7 @@
                 <Input v-model="model.name" :clearable="true" />
             </FormItem>
             <FormItem label="Route" prop="route">
-                <Input v-model="model.route" placeholder="/app/pathname/" :clearable="true" />
+                <Input v-model="model.route" placeholder="/URL/pathname/" :clearable="true" />
             </FormItem>
             <FormItem label="Entry" prop="entry">
                 <Input v-model="model.entry" placeholder="URL" :clearable="true" />
@@ -68,15 +68,11 @@ export default {
 
 function setup(props, { emit }) {
     const rules = reactive({
-        name: [
-            { required: true, trigger: 'blur' },
-        ],
-        entry: [
-            { required: true, trigger: 'blur' },
-        ],
+        name: [{ required: true, trigger: 'blur' }],
+        entry: [{ required: true, trigger: 'blur' }],
         route: [
             { required: true, trigger: 'blur' },
-            { validator: (_, value) => /^\/\w+\/$/.test(value), message: 'format: /app/pathname/' },
+            { validator: (_, value) => /^\/\w+\/$/.test(value), message: 'format: /URL/pathname/' },
         ],
         fetchOption: [{
             validator(_, value) {
