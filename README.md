@@ -1,9 +1,15 @@
 # &lt;m-app&gt;
-可能是你见过最简单的微前端解决方案，一行代码即可实现应用的接入。
+可能是你见过最简单的微前端解决方案，一行代码即可实现应用的接入 😎
 ```html
 <m-app entry="http://example.com/path/to/entry.html"></m-app>
 ```
-m-app 将应用的 DOM 树置于 Shadow DOM 中维护，从而实现 DOM 树独立与 CSS 隔离。而 JavaScript 代码则置于**同源** iframe 中运行，由 iframe 提供独立的运行环境。
+体验一下，并且可以在线接入你的应用 🎉
+1. <a href="http://ambit.gitee.io/m-app/" target="_blank">Gitee Pages</a>
+1. <a href="https://ambit-tsai.github.io/m-app/" target="_blank">GitHub Pages</a>
+
+
+## 📃 简介
+m-app 将应用的 DOM 树置于 Shadow DOM 中维护，从而实现 DOM 树独立以及 CSS 隔离。而 JavaScript 代码则置于**同源** iframe 中运行，由 iframe 提供独立的运行环境，并劫持 iframe 中 `document`、`document.head`、`document.body` 等元素对象的方法，重定向到 Shadow DOM 中对应的元素上去。此外，还劫持了普通元素上有引入新元素能力的方法，如 `appendChild`、`replaceChild` 等，分析其中的 `<script>` 元素，并置于 iframe 中运行。
 
 m-app 的 Shadow DOM 结构如下：
 ```html
@@ -34,7 +40,7 @@ m-app 的 Shadow DOM 与正常的 DOM 结构基本一致，降低应用接入的
 1. 天然支持 DOM、CSS、JS 隔离
 1. 不限制接入应用的技术栈
 1. 支持多应用并行
-1. 支持 `<script>` 的 type="module"、defer、async 等特性
+1. 支持 `<script>` 的 type="module"、defer、async 等原生特性
 
 
 ## ⬇️ 安装
@@ -53,7 +59,7 @@ import 'm-app';
 ```
 
 
-## 📱 联系
+## ☎️ 联系
 1. *微信*: ambit_tsai
 1. *QQ群*: 663286147
 1. *邮箱*: ambit_tsai@qq.com
