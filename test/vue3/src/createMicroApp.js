@@ -1,5 +1,5 @@
 import { h, ref } from 'vue';
-import { setAppOption } from 'm-app';
+import { setAppOption } from '@ambit_tsai/m-app';
 import { PROJECT_NAME } from './constant';
 
 

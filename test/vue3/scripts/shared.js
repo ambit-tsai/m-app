@@ -9,6 +9,6 @@ module.exports = {
         vue(),
     ],
     alias: {
-        'm-app': path.resolve(__dirname, '../../../dist/m-app'),
+        '@ambit_tsai/m-app': path.resolve(__dirname, '../../../dist/m-app'),
     },
 }

@@ -45,13 +45,13 @@ m-app 的 Shadow DOM 与正常的 DOM 结构基本一致，降低应用接入的
 
 ## ⬇️ 安装
 ```
-npm i -S m-app
+npm i -S @ambit_tsai/m-app
 ```
 
 
 ## 🔨 使用
 ```javascript
-import 'm-app';
+import '@ambit_tsai/m-app';
 ```
 或者
 ```html
