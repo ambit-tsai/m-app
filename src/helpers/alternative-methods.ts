@@ -59,30 +59,29 @@ const ELEMENT_OR_DOCUMENT_FRAGMENT = [1, 11];
 
 function hijackScriptElements(nodes: (string | Node)[], method: Function, ctx: Node, args: unknown[]) {
     const newScripts: HTMLScriptElement[] = [];
-    for (const node of nodes) {
-        if (!isObject(node)) {
-            continue;
-        }
-        if ((<Element> node).tagName === 'SCRIPT') {
-            if (SCRIPT_TYPES.includes((<HTMLScriptElement> node).type)) {
-                newScripts.push(<HTMLScriptElement> node.cloneNode(true));
-                (<HTMLScriptElement> node).type = 'm;' + (<HTMLScriptElement> node).type;
-            }
-        } else if (ELEMENT_OR_DOCUMENT_FRAGMENT.includes(node.nodeType) && node.childNodes.length) {
-            const list = (<Element> node).querySelectorAll('script');
-            for (let i = 0, { length } = list; i < length; ++i) {
+    const root = <MicroAppRoot> ctx.getRootNode();
+    const isMicroApp = root?.host instanceof MicroAppElement;
+    if (isMicroApp) {
+        for (const node of nodes) {
+            if (!isObject(node)) continue;
+            if ((<Element> node).tagName === 'SCRIPT') {
                 if (SCRIPT_TYPES.includes((<HTMLScriptElement> node).type)) {
                     newScripts.push(<HTMLScriptElement> node.cloneNode(true));
                     (<HTMLScriptElement> node).type = 'm;' + (<HTMLScriptElement> node).type;
+                }
+            } else if (ELEMENT_OR_DOCUMENT_FRAGMENT.includes(node.nodeType) && node.childNodes.length) {
+                const list = (<Element> node).querySelectorAll('script');
+                for (let i = 0, { length } = list; i < length; ++i) {
+                    if (SCRIPT_TYPES.includes((<HTMLScriptElement> node).type)) {
+                        newScripts.push(<HTMLScriptElement> node.cloneNode(true));
+                        (<HTMLScriptElement> node).type = 'm;' + (<HTMLScriptElement> node).type;
+                    }
                 }
             }
         }
     }
     method.apply(ctx, args);
-    if (newScripts.length) {
-        const root = <MicroAppRoot> ctx.getRootNode();
-        if (root?.host instanceof MicroAppElement) {
-            appendTo(root.frameElement.contentDocument.body, ...newScripts);
-        }
+    if (isMicroApp && newScripts.length) {
+        appendTo(root.frameElement.contentDocument.body, ...newScripts);
     }
 }
