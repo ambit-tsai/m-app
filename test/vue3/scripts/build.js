@@ -10,7 +10,11 @@ module.exports = build({
         rollupOptions: {
             plugins: [
                 copy({
-                    assets: ['js-runtime.html'],
+                    assets: [
+                        'js-runtime.html',
+                        '404.html',
+                        '.spa'
+                    ],
                 }),
             ],
         },
