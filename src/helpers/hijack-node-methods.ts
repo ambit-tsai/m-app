@@ -52,7 +52,9 @@ function hijackElement({ HTMLElement }: Window) {
 
 function hijackShadowRoot({ ShadowRoot }: Window) {
     for (const [key, method] of entries(alternativeMethods)) {
-        ShadowRoot[PROTOTYPE][key] = method;
+        if (key in ShadowRoot[PROTOTYPE]) {
+            ShadowRoot[PROTOTYPE][key] = method;
+        }
     }
 }
 
