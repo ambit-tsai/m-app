@@ -103,12 +103,11 @@ provide('appList', appList);
 }
 .el-menu {
     height: 100%;
-}
-.el-main {
     overflow: auto;
 }
-:global(m-app) {
+.el-main > :deep(m-app) {
     height: 100%;
+    overflow: auto;
 }
 </style>
 <style>

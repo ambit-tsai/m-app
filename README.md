@@ -9,7 +9,7 @@
 
 
 ## 📃 简介
-m-app 将应用的 DOM 树置于 Shadow DOM 中维护，从而实现 DOM 树独立以及 CSS 隔离。而 JavaScript 代码则置于**同源** iframe 中运行，由 iframe 提供独立的运行环境，并劫持 iframe 中 `document`、`document.head`、`document.body` 等元素对象的方法，重定向到 Shadow DOM 中对应的元素上去。此外，还劫持了普通元素上有引入新元素能力的方法，如 `appendChild`、`replaceChild` 等，分析其中的 `<script>` 元素，并置于 iframe 中运行。
+m-app 将应用的 DOM 树置于 Shadow DOM 中维护，从而实现 DOM 树独立以及 CSS 隔离。而 JavaScript 代码则置于**同源** iframe 中运行，由 iframe 提供独立的运行环境，并劫持 iframe 中 `document` 的部分属性与方法，重定向到 Shadow DOM 中对应的元素上去。此外，还劫持了普通元素上有引入新元素能力的方法，如 `appendChild`、`replaceChild` 等，分析其中的 `<script>` 元素，并置于 iframe 中运行。
 
 m-app 的 Shadow DOM 结构如下：
 ```html
