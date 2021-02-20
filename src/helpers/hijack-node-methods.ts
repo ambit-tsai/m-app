@@ -14,8 +14,6 @@ import { defineProperties, defineProperty, entries, getOwnPropertyDescriptor, ke
 const methodsOfEventTargetProto = getObjectMethods(EventTarget[PROTOTYPE]);
 const methodsOfNodeProto = getObjectMethods(Node[PROTOTYPE]);
 const methodsOfParentNodeProto = getObjectMethods(DocumentFragment[PROTOTYPE]);
-const methodsOfElementProto = getObjectMethods(Element[PROTOTYPE]);
-const methodsOfSpecialElement = methodsOfElementProto.concat(methodsOfNodeProto, methodsOfEventTargetProto);
 const methodsOfDocument = methodsOfParentNodeProto.concat(methodsOfNodeProto, methodsOfEventTargetProto);
 
 function getObjectMethods(obj: object): string[] {
@@ -38,8 +36,8 @@ export function hijackNodeMethodsOfGlobal() {
 
 export function hijackNodeMethodsOfIframe(contentWindow: Window) {
     hijackElement(contentWindow);
-    hijackSpecialElement(contentWindow);
     hijackDocument(contentWindow);
+    hijackWindow(contentWindow);
 }
 
 
@@ -64,24 +62,6 @@ const commonDesc = {
     enumerable: false,
     writable: true,
 };
-
-
-function hijackSpecialElement({ document, mRoot }: Window) {
-    for (const key of methodsOfSpecialElement) {
-        defineProperty(document.documentElement, key, {
-            ...commonDesc,
-            value: (...args) => mRoot.documentElement[key](...args),
-        });
-        defineProperty(document.head, key, {
-            ...commonDesc,
-            value: (...args) => mRoot.head[key](...args),
-        });
-        defineProperty(document.body, key, {
-            ...commonDesc,
-            value: (...args) => mRoot.body[key](...args),
-        });
-    }
-}
 
 
 function hijackDocument({ document, mRoot }: Window) {
@@ -111,5 +91,33 @@ function hijackDocument({ document, mRoot }: Window) {
             ...commonDesc,
             value: (name: string) => mRoot.querySelectorAll(name),
         },
+        activeElement: {
+            enumerable: true,
+            get: () => mRoot.activeElement,
+        },
+        documentElement: {
+            enumerable: true,
+            get: () => mRoot.documentElement,
+        },
+        head: {
+            enumerable: true,
+            get: () => mRoot.head,
+        },
+        body: {
+            enumerable: true,
+            get: () => mRoot.body,
+        },
     });
+}
+
+
+function hijackWindow(contentWindow: Window) {
+    const { getComputedStyle } = contentWindow;
+    contentWindow.getComputedStyle = (el: Element, ...args) => {
+        const win = el?.ownerDocument?.defaultView;
+        return win
+            // @ts-ignore
+            ? el.host?.tagName === 'M-APP' ? el.host.style : win.getComputedStyle(el, ...args)
+            : getComputedStyle(el, ...args);
+    };
 }

@@ -1,4 +1,4 @@
-import { addEventListenerTo, appendChildTo, appendTo, defineProperties, defineProperty, warn } from './utils';
+import { addEventListenerTo, appendChildTo, appendTo, defineProperties, defineProperty, replaceChild, warn } from './utils';
 import { syncUrlToTopWindow, updateTopWindowUrl } from './sync-url';
 import { hijackNodeMethodsOfIframe } from './hijack-node-methods';
 import { SCRIPT_TYPES } from './constant';
@@ -49,7 +49,7 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
     // Isolate <base> element
     const baseEl = htmlEl.querySelector('base');
     if (baseEl) {
-        appendChildTo(contentDocument.head, baseEl);
+        appendChildTo(contentDocument.firstChild, baseEl);
     }
 
     // Recreate <script> elements
@@ -98,7 +98,7 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
     
     requestAnimationFrame(() => {
         appendChildTo(root, htmlEl);
-        appendTo(contentDocument.body, ...newScripts);
+        appendTo(contentDocument.firstChild, ...newScripts);
     });
 }
 
@@ -112,38 +112,26 @@ function onIframeReload(option: MicroAppOption, root: MicroAppRoot) {
         return;
     }
 
-    // Create a new DOM tree
-    const newHtmlEl = contentDocument.createElement('html');
-    const newHeadEl = contentDocument.createElement('head');
-    appendTo(newHtmlEl, newHeadEl, contentDocument.createElement('body'));
-
-    // Isolate <base> element
     const { documentElement, head, body } = contentDocument;
+    const newHtmlEl = contentDocument.createElement('html');
     const baseEl = documentElement.querySelector('base');
-    if (baseEl) {
-        appendChildTo(newHeadEl, baseEl);
-    }
-
-    // Move iframe DOM tree into Shadow DOM
-    root.replaceChild(documentElement, root.documentElement);
-    defineProperties(root, {
-        documentElement: {
-            value: documentElement,
-        },
-        head: {
-            value: head,
-        },
-        body: {
-            value: body,
-        },
-    });
-
-    // Append new Dom tree into iframe
-    appendChildTo(contentDocument, newHtmlEl);
 
     defineProperty(contentWindow, 'mRoot', { value: root });
     updateTopWindowUrl(option, contentWindow);
     syncUrlToTopWindow(contentWindow, option);
     hijackNodeMethodsOfIframe(contentWindow);
-    contentWindow.dispatchEvent(new Event('MicroAppReady'));
+    
+    requestAnimationFrame(() => {
+        if (baseEl) {
+            appendChildTo(newHtmlEl, baseEl);
+        }
+        replaceChild.call(root, documentElement, root.documentElement);
+        defineProperties(root, {
+            documentElement: { value: documentElement },
+            head: { value: head },
+            body: { value: body },
+        });
+        appendChildTo(contentDocument, newHtmlEl);
+        contentWindow.dispatchEvent(new Event('MicroAppReady'));
+    });
 }
