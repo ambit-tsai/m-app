@@ -5,6 +5,13 @@ import router from './router';
 import '@ambit_tsai/m-app';
 
 
+const redirect = localStorage.getItem('redirect');
+if (redirect) {
+    localStorage.setItem('redirect', '');
+    router.replace(redirect);
+}
+
+
 const app = createApp({
     render: () => h(App),
 });
