@@ -120,4 +120,9 @@ function hijackWindow(contentWindow: Window) {
             ? el.host?.tagName === 'M-APP' ? el.host.style : win.getComputedStyle(el, ...args)
             : getComputedStyle(el, ...args);
     };
+
+    // requestAnimationFrame() calls are paused in most browsers when running in hidden <iframe>s
+    // in order to improve performance and battery life.
+    contentWindow.requestAnimationFrame = (callback: FrameRequestCallback) => requestAnimationFrame(callback);
+    contentWindow.cancelAnimationFrame = (handle: number) => cancelAnimationFrame(handle);
 }
