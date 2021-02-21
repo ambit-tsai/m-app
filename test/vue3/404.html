@@ -1,6 +1,4 @@
-<html>
-    <script>
-        localStorage.setItem('redirect', location.href);
-        location.href = '/m-app/';
-    </script>
-</html>
+<script>
+    localStorage.setItem('redirect', location.pathname + location.search + location.hash);
+    location.href = '/m-app/';
+</script>
