@@ -1,5 +1,4 @@
-import MicroAppElement from '../MicroAppElement';
-import { SCRIPT_TYPES } from './constant';
+import { EL_TAG_NAME, SCRIPT_TYPES } from './constant';
 import {
     appendTo,
     isObject,
@@ -60,7 +59,7 @@ const ELEMENT_OR_DOCUMENT_FRAGMENT = [1, 11];
 function hijackScriptElements(nodes: (string | Node)[], method: Function, ctx: Node, args: unknown[]) {
     const newScripts: HTMLScriptElement[] = [];
     const root = <MicroAppRoot> ctx.getRootNode();
-    const isMicroApp = root?.host instanceof MicroAppElement;
+    const isMicroApp = root?.host?.tagName === EL_TAG_NAME;
     if (isMicroApp) {
         for (const node of nodes) {
             if (!isObject(node)) continue;

@@ -1,4 +1,4 @@
-import { APP_TAG, PROTOTYPE } from './constant';
+import { EL_LOCAL_NAME, PROTOTYPE } from './constant';
 
 
 export const {
@@ -31,7 +31,7 @@ export const {
 
 
 export function warn(...args: unknown[]) {
-    console.warn(`[${APP_TAG}]`, ...args);
+    console.warn(`[${EL_LOCAL_NAME}]`, ...args);
 }
 
 

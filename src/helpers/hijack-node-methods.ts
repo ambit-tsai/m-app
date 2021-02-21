@@ -6,7 +6,7 @@
  *   HTMLBodyElement -> HTMLElement -> Element(impl ParentNode, ChildNode) -> Node -> EventTarget
  *   HTMLHeadElement -> HTMLElement -> Element(impl ParentNode, ChildNode) -> Node -> EventTarget
  */
-import { PROTOTYPE } from './constant';
+import { PROTOTYPE, EL_TAG_NAME } from './constant';
 import { alternativeMethods } from './alternative-methods';
 import { defineProperties, defineProperty, entries, getOwnPropertyDescriptor, keys } from './utils';
 
@@ -112,13 +112,9 @@ function hijackDocument({ document, mRoot }: Window) {
 
 
 function hijackWindow(contentWindow: Window) {
-    const { getComputedStyle } = contentWindow;
     contentWindow.getComputedStyle = (el: Element, ...args) => {
-        const win = el?.ownerDocument?.defaultView;
-        return win
-            // @ts-ignore
-            ? el.host?.tagName === 'M-APP' ? el.host.style : win.getComputedStyle(el, ...args)
-            : getComputedStyle(el, ...args);
+        // @ts-ignore: return the style of MicroAppElement when el is a MicroAppRoot
+        return el?.host?.tagName === EL_TAG_NAME ? el.host.style : getComputedStyle(el, ...args);
     };
 
     // requestAnimationFrame() calls are paused in most browsers when running in hidden <iframe>s
