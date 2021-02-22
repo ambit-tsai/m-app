@@ -1,7 +1,7 @@
 /**
  * The inheritance relationships:
- *   ShadowRoot -> DocumentFragment(impl ParentNode) -> Node -> EventTarget
- *   HTMLDocument -> Document(impl ParentNode) -> Node -> EventTarget
+ *   ShadowRoot(mixin DocumentOrShadowRoot) -> DocumentFragment(impl ParentNode) -> Node -> EventTarget
+ *   HTMLDocument -> Document(impl ParentNode, mixin DocumentOrShadowRoot) -> Node -> EventTarget
  *   HTMLHtmlElement -> HTMLElement -> Element(impl ParentNode, ChildNode) -> Node -> EventTarget
  *   HTMLBodyElement -> HTMLElement -> Element(impl ParentNode, ChildNode) -> Node -> EventTarget
  *   HTMLHeadElement -> HTMLElement -> Element(impl ParentNode, ChildNode) -> Node -> EventTarget
@@ -15,6 +15,13 @@ const methodsOfEventTargetProto = getObjectMethods(EventTarget[PROTOTYPE]);
 const methodsOfNodeProto = getObjectMethods(Node[PROTOTYPE]);
 const methodsOfParentNodeProto = getObjectMethods(DocumentFragment[PROTOTYPE]);
 const methodsOfDocument = methodsOfParentNodeProto.concat(methodsOfNodeProto, methodsOfEventTargetProto);
+const methodsOfDocumentOrShadowRoot = [
+    'caretPositionFromPoint', 'elementFromPoint', 'elementsFromPoint', 
+    'getAnimations', 'getSelection', 'nodeFromPoint', 'nodesFromPoint'
+];
+const propsOfDocumentOrShadowRoot = [
+    'activeElement', 'fullscreenElement', 'pictureInPictureElement', 'pointerLockElement', 'styleSheets'
+];
 
 function getObjectMethods(obj: object): string[] {
     const methods: string[] = [];
@@ -71,6 +78,23 @@ function hijackDocument({ document, mRoot }: Window) {
             value: (...args) => mRoot[key](...args),
         });
     }
+    for (const key of methodsOfDocumentOrShadowRoot) {
+        if (key in document && key in mRoot) {
+            defineProperty(document, key, {
+                ...commonDesc,
+                value: (...args) => mRoot[key](...args),
+            });
+        }
+    }
+    for (const key of propsOfDocumentOrShadowRoot) {
+        if (key in document && key in mRoot) {
+            defineProperty(document, key, {
+                enumerable: true,
+                get: () => mRoot[key],
+                set: val => mRoot[key] = val,
+            });
+        }
+    }
     defineProperties(document, {
         getElementById: {
             ...commonDesc,
@@ -91,10 +115,6 @@ function hijackDocument({ document, mRoot }: Window) {
             ...commonDesc,
             value: (name: string) => mRoot.querySelectorAll(name),
         },
-        activeElement: {
-            enumerable: true,
-            get: () => mRoot.activeElement,
-        },
         documentElement: {
             enumerable: true,
             get: () => mRoot.documentElement,
@@ -106,6 +126,9 @@ function hijackDocument({ document, mRoot }: Window) {
         body: {
             enumerable: true,
             get: () => mRoot.body,
+        },
+        exitFullscreen: {
+            value: () => document.exitFullscreen(),
         },
     });
 }
@@ -121,4 +144,6 @@ function hijackWindow(contentWindow: Window) {
     // in order to improve performance and battery life.
     contentWindow.requestAnimationFrame = (callback: FrameRequestCallback) => requestAnimationFrame(callback);
     contentWindow.cancelAnimationFrame = (handle: number) => cancelAnimationFrame(handle);
+
+    contentWindow.getSelection = () => getSelection();
 }
