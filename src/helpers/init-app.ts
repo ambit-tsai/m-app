@@ -61,10 +61,11 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
         const { type, attributes } = el;
         if (SCRIPT_TYPES.includes(type)) {
             const newEl = contentDocument.createElement('script');
+            newEl.text = el.text;
+            newEl.async = el.async; // fix: the default value of "async" is true
             for (let i = 0, { length } = attributes; i < length; ++i) {
                 newEl.setAttribute(attributes[i].name, attributes[i].value);
             }
-            newEl.text = el.text;
             newScripts.push(newEl);
             if (newEl.defer) {
                 deferScripts.push(newEl);
