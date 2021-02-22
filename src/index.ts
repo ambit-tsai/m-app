@@ -5,7 +5,7 @@ import { hijackNodeMethodsOfGlobal } from './helpers/hijack-node-methods';
 import MicroAppElement from './MicroAppElement';
 
 
-export function setAppOption(id: string, option: object, merge = true) {
+export function setAppOption(id: string, option: MicroAppOption, merge = true) {
     appOptionMap[id] = merge ? {
         ...appOptionMap[id],
         ...option,

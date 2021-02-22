@@ -4,7 +4,7 @@ import { assign, warn } from './utils';
 export const appOptionMap = {};
 
 
-const defaultOption: MicroAppOption = {
+const defaultOption = <MicroAppOption> {
     shadowMode: 'closed',
     runtimePath: '/js-runtime.html',
 };
@@ -26,6 +26,9 @@ export function initOption(app: MicroAppElement): MicroAppOption {
     }
     if (!option.entry) {
         warn('"entry" is not set');
+    }
+    if (typeof option.beforeReady !== 'function') {
+        option.beforeReady = undefined;
     }
     initRoute(option);
     return option;

@@ -14,7 +14,7 @@ export default class MicroAppElement extends HTMLElement {
         if (ctx.#root) {
             shadowRoot = ctx.#root;
         } else {
-            shadowRoot = ctx.attachShadow({ mode: option.shadowMode });
+            shadowRoot = <MicroAppRoot> ctx.attachShadow({ mode: option.shadowMode });
             ctx.#root = shadowRoot;
         }
         initApp(option, shadowRoot);

@@ -1,21 +1,22 @@
 
-interface MicroAppOption {
+declare interface MicroAppOption {
     id?: string;
     entry?: string;
     route?: RegExp;
-    shadowMode: ShadowRootMode;
-    runtimePath: string;
+    shadowMode?: ShadowRootMode;
+    runtimePath?: string;
     fetchOption?: object;
+    beforeReady?: (win: Window) => void;
 }
 
-interface MicroAppRoot extends ShadowRoot {
-    frameElement?: HTMLIFrameElement;
-    documentElement?: HTMLHtmlElement;
-    head?: HTMLHeadElement;
-    body?: HTMLBodyElement;
+declare interface MicroAppRoot extends ShadowRoot {
+    frameElement: HTMLIFrameElement;
+    documentElement: HTMLHtmlElement;
+    head: HTMLHeadElement;
+    body: HTMLBodyElement;
 }
 
-interface MicroAppElement extends HTMLElement {}
+declare interface MicroAppElement extends HTMLElement {}
 
 declare interface HTMLElement {
     replaceChildren(...nodes: (string | Node)[]): void;
@@ -28,3 +29,5 @@ declare interface Window {
     History: Function;
     Node: Function;
 }
+
+declare function setAppOption(id: string, option: MicroAppOption, merge?: boolean) 

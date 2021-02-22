@@ -95,6 +95,7 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
     contentWindow.history.replaceState(history.state, '', location.href);
     syncUrlToTopWindow(contentWindow, option);
     hijackNodeMethodsOfIframe(contentWindow);
+    option.beforeReady?.(contentWindow);
     
     requestAnimationFrame(() => {
         appendChildTo(root, htmlEl);
@@ -132,6 +133,7 @@ function onIframeReload(option: MicroAppOption, root: MicroAppRoot) {
             body: { value: body },
         });
         appendChildTo(contentDocument, newHtmlEl);
+        option.beforeReady?.(contentWindow);
         contentWindow.dispatchEvent(new Event('MicroAppReady'));
     });
 }
