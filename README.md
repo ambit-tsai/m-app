@@ -12,7 +12,7 @@
 ***m-app*** 将微应用的 DOM 树置于 **Shadow DOM** 中维护，从而实现 DOM 树独立以及 CSS 隔离，而 JavaScript 代码则置于**同源 iframe** 中运行，由 iframe 提供独立的运行环境。
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/ambit-tsai/m-app/assets/structure.svg" title="感谢王*扬同学的图" width="300px">
+    <img src="https://gitee.com/ambit/m-app/raw/assets/structure.svg" title="感谢王*扬同学的图" width="300px">
 </p>
 
 出于降低改造成本的考虑，微应用的 Shadow DOM 与正常 DOM 的结构保持一致。
