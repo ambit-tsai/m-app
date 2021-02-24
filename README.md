@@ -9,9 +9,15 @@
 
 
 ## 📃 简介
-m-app 将应用的 DOM 树置于 Shadow DOM 中维护，从而实现 DOM 树独立以及 CSS 隔离。而 JavaScript 代码则置于**同源** iframe 中运行，由 iframe 提供独立的运行环境，并劫持 iframe 中 `window` 与 `document` 的常用属性与方法，重定向到主应用和 Shadow DOM 上相关的属性与方法。此外，还劫持了普通元素上有引入新元素能力的方法，如 `appendChild`、`replaceChild` 等，分析其中的 `<script>` 元素，并置于 iframe 中运行。
+***m-app*** 将微应用的 DOM 树置于 **Shadow DOM** 中维护，从而实现 DOM 树独立以及 CSS 隔离，而 JavaScript 代码则置于**同源 iframe** 中运行，由 iframe 提供独立的运行环境。
 
-m-app 的 Shadow DOM 结构如下：
+<p align="center">
+    <img src="https://raw.githubusercontent.com/ambit-tsai/m-app/assets/structure.svg" title="感谢王*扬同学的图" width="300px">
+</p>
+
+出于降低改造成本的考虑，微应用的 Shadow DOM 与正常 DOM 的结构保持一致。
+
+微应用的 Shadow DOM 结构：
 ```html
            ├─<iframe hidden>  
            │                 ├─<meta>
@@ -22,7 +28,7 @@ ShadowRoot─│        ├─<head>─├─<title>
                     ├─<body>─├─<div>
                              ├─...
 ```
-m-app 的 Shadow DOM 与正常的 DOM 结构基本一致，降低应用接入的改造成本。
+正常 DOM 结构：
 ```html
                              ├─<meta>
                     ├─<head>─├─<title>
@@ -35,12 +41,12 @@ m-app 的 Shadow DOM 与正常的 DOM 结构基本一致，降低应用接入的
 
 
 ## ✨ 特性
-1. 运行时集成，应用可独立开发、部署、升级
-1. HTML Entry
-1. 天然支持 DOM、CSS、JS 隔离
-1. 不限制接入应用的技术栈
-1. 支持多应用并行
-1. 支持 `<script>` 的 type="module"、defer、async 等原生特性
+1. 对 DOM、CSS、JS 进行硬隔离，实现**真正**的技术栈无关
+1. 微应用与基座应用的 UI 可以完美融合，无 `<iframe>` 的窗口隔离问题
+1. 运行时集成，微应用可独立开发、部署、升级
+1. 支持多应用同时接入
+1. 支持 `<script>` 的 `type="module"`、`defer`、`async` 等特性
+1. HTML Entry，符合一般应用的开发方式，无需改造
 
 
 ## ⬇️ 安装
