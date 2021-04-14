@@ -29,31 +29,31 @@ export async function initApp(option: MicroAppOption, root: MicroAppRoot) {
 
 function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: string) {
     const { contentWindow, contentDocument } = root.frameElement;
-    const htmlEl = contentDocument.createElement('html');
-    htmlEl.innerHTML = htmlText;
+    const externalHtmlEl = contentDocument.createElement('html');
+    externalHtmlEl.innerHTML = htmlText;
     defineProperties(root, {
         documentElement: {
             configurable: true,
-            value: htmlEl,
+            value: externalHtmlEl,
         },
         head: {
             configurable: true,
-            value: htmlEl.querySelector('head'),
+            value: externalHtmlEl.querySelector('head'),
         },
         body: {
             configurable: true,
-            value: htmlEl.querySelector('body'),
+            value: externalHtmlEl.querySelector('body'),
         },
     });
 
     // Isolate <base> element
-    const baseEl = htmlEl.querySelector('base');
+    const baseEl = externalHtmlEl.querySelector('base');
     if (baseEl) {
         appendChildTo(contentDocument.firstChild, baseEl);
     }
 
     // Recreate <script> elements
-    const scriptList = htmlEl.querySelectorAll('script');
+    const scriptList = externalHtmlEl.querySelectorAll('script');
     const newScripts: HTMLScriptElement[] = [];
     const deferScripts: HTMLScriptElement[] = [];
     const asyncScripts: HTMLScriptElement[] = [];
@@ -95,12 +95,14 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
     defineProperty(contentWindow, 'mRoot', { value: root });
     contentWindow.history.replaceState(history.state, '', location.href);
     syncUrlToTopWindow(contentWindow, option);
+
+    const internalHtmlEl = contentDocument.documentElement
     hijackNodeMethodsOfIframe(contentWindow);
     option.beforeReady?.(contentWindow);
     
     requestAnimationFrame(() => {
-        appendChildTo(root, htmlEl);
-        appendTo(contentDocument.firstChild, ...newScripts);
+        appendChildTo(root, externalHtmlEl);
+        appendTo(internalHtmlEl, ...newScripts);
     });
 }
 
