@@ -52,3 +52,6 @@ export function appendTo(node: Node, ...args: (string | Node)[]) {
 export function isObject(value: unknown): value is object {
     return value ? typeof value === 'object': false;
 }
+
+
+export const domParser = new DOMParser()​​

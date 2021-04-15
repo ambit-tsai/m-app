@@ -1,4 +1,4 @@
-import { addEventListenerTo, appendChildTo, appendTo, defineProperties, defineProperty, replaceChild, warn } from './utils';
+import { addEventListenerTo, appendChildTo, appendTo, defineProperties, defineProperty, replaceChild, warn, domParser } from './utils';
 import { syncUrlToTopWindow, updateTopWindowUrl } from './sync-url';
 import { hijackNodeMethodsOfIframe } from './hijack-node-methods';
 import { SCRIPT_TYPES } from './constant';
@@ -29,8 +29,8 @@ export async function initApp(option: MicroAppOption, root: MicroAppRoot) {
 
 function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: string) {
     const { contentWindow, contentDocument } = root.frameElement;
-    const externalHtmlEl = contentDocument.createElement('html');
-    externalHtmlEl.innerHTML = htmlText;
+    const newDoc = domParser.parseFromString(htmlText, 'text/html')
+    const externalHtmlEl = newDoc.documentElement
     defineProperties(root, {
         documentElement: {
             configurable: true,
