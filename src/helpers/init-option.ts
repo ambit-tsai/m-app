@@ -57,7 +57,7 @@ function toCamelCase(attrName: string): string {
     let newName = list[0]
     for (let i = 1, { length } = list; i < length; ++i) {
         const [firstLetter, ...rest] = list[1]
-        newName += firstLetter.toUpperCase() + rest
+        newName += firstLetter.toUpperCase() + rest.join('')
     }
     return newName
 }
