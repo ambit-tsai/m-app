@@ -13,13 +13,13 @@ export function setAppOption(id: string, option: MicroAppOption, merge = true) {
 }
 
 
-// Append default style
-const styleEL = document.createElement('style');
-styleEL.textContent = `${EL_LOCAL_NAME}{display:block;position:relative;}`;
-appendChildTo(document.head, styleEL);
-
-
-hijackNodeMethodsOfGlobal();
-
-
-customElements.define(EL_LOCAL_NAME, MicroAppElement);
+if (!customElements.get(EL_LOCAL_NAME)) {
+    // Append default style
+    const styleEL = document.createElement('style');
+    styleEL.textContent = `${EL_LOCAL_NAME}{display:block;position:relative;}`;
+    appendChildTo(document.head, styleEL);
+    
+    hijackNodeMethodsOfGlobal();
+    
+    customElements.define(EL_LOCAL_NAME, MicroAppElement);
+}
