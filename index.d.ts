@@ -7,6 +7,8 @@ declare interface MicroAppOption {
     runtimePath?: string;
     fetchOption?: object;
     beforeReady?: (win: Window) => void;
+    initialUrl?: string;
+    initialState?: any;
 }
 
 declare interface MicroAppRoot extends ShadowRoot {

@@ -93,7 +93,7 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
     }
 
     defineProperty(contentWindow, 'mRoot', { value: root });
-    contentWindow.history.replaceState(history.state, '', location.href);
+    contentWindow.history.replaceState(option.initialState, '', option.initialUrl);
     syncUrlToTopWindow(contentWindow, option);
 
     const internalHtmlEl = contentDocument.documentElement

@@ -1,6 +1,6 @@
 {
   "name": "@ambit_tsai/m-app",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "description": "A micro app container component, it's as easy as iframe, and beyond the limitation of iframe",
   "author": "Ambit Tsai <ambit_tsai@qq.com>",
   "license": "Apache-2.0",
