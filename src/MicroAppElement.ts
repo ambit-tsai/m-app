@@ -1,5 +1,6 @@
 import { initOption } from './helpers/init-option';
 import { initApp } from './helpers/init-app';
+import { defineProperties } from './helpers/utils';
 
 
 export default class MicroAppElement extends HTMLElement {
@@ -22,6 +23,11 @@ export default class MicroAppElement extends HTMLElement {
 
     disconnectedCallback() {
         this.#root.innerHTML = '';
+        defineProperties(this.#root, {
+            documentElement: { value: null },
+            head: { value: null },
+            body: { value: null },
+        });
     }
 
 }
