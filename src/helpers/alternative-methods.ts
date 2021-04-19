@@ -78,12 +78,13 @@ function hijackScriptElements(nodes: (string | Node)[], method: Function, ctx: N
                     newScripts.push(<HTMLScriptElement> node.cloneNode(true));
                     (<HTMLScriptElement> node).type = 'm;' + (<HTMLScriptElement> node).type;
                 }
-            } else if (ELEMENT_OR_DOCUMENT_FRAGMENT.includes(node.nodeType) && node.childNodes.length) {
+            } else if (ELEMENT_OR_DOCUMENT_FRAGMENT.includes(node.nodeType) && (<Element> node).children.length) {
                 const list = (<Element> node).querySelectorAll('script');
                 for (let i = 0, { length } = list; i < length; ++i) {
-                    if (SCRIPT_TYPES.includes((<HTMLScriptElement> node).type)) {
+                    const el = list[i]
+                    if (SCRIPT_TYPES.includes(el.type)) {
                         newScripts.push(<HTMLScriptElement> node.cloneNode(true));
-                        (<HTMLScriptElement> node).type = 'm;' + (<HTMLScriptElement> node).type;
+                        el.type = 'm;' + el.type;
                     }
                 }
             }
