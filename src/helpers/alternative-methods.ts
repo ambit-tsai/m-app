@@ -1,4 +1,5 @@
 import { EL_TAG_NAME, SCRIPT_TYPES } from './constant';
+import { hijackEventAttr } from './hijack-event-attr';
 import {
     appendTo,
     isObject,
@@ -18,30 +19,39 @@ export const alternativeMethods: {
     [key: string]: Function
 } = {
     appendChild<T extends Node>(aChild: T): T {
-        hijackScriptElements([aChild], appendChild, this, [aChild]);
+        const nodes = [aChild]
+        hijackEventAttr(nodes)
+        hijackScriptElements([aChild], appendChild, this, nodes);
         return aChild;
     },
     insertBefore<T extends Node>(newNode: T, referenceNode: Node): T {
+        hijackEventAttr([newNode])
         hijackScriptElements([newNode], insertBefore, this, [newNode, referenceNode]);
         return newNode;
     },
     replaceChild<T extends Node>(newChild: Node, oldChild: T): T {
+        hijackEventAttr([newChild])
         hijackScriptElements([newChild], replaceChild, this, [newChild, oldChild]);
         return oldChild;
     },
     append(...nodes: (string | Node)[]) {
+        hijackEventAttr(nodes)
         hijackScriptElements(nodes, append, this, nodes);
     },
     prepend(...nodes: (string | Node)[]) {
+        hijackEventAttr(nodes)
         hijackScriptElements(nodes, prepend, this, nodes);
     },
     after(...nodes: (string | Node)[]) {
+        hijackEventAttr(nodes)
         hijackScriptElements(nodes, after, this, nodes);
     },
     before(...nodes: (string | Node)[]) {
+        hijackEventAttr(nodes)
         hijackScriptElements(nodes, before, this, nodes);
     },
     replaceWith(...nodes: (string | Node)[]) {
+        hijackEventAttr(nodes)
         hijackScriptElements(nodes, replaceWith, this, nodes);
     },
 };

@@ -2,6 +2,7 @@ import { addEventListenerTo, appendChildTo, appendTo, defineProperties, definePr
 import { syncUrlToTopWindow, updateTopWindowUrl } from './sync-url';
 import { hijackNodeMethodsOfIframe } from './hijack-node-methods';
 import { SCRIPT_TYPES } from './constant';
+import { hijackEventAttr } from './hijack-event-attr';
 
 
 export async function initApp(option: MicroAppOption, root: MicroAppRoot) {
@@ -38,13 +39,15 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
         },
         head: {
             configurable: true,
-            value: externalHtmlEl.querySelector('head'),
+            value: newDoc.head,
         },
         body: {
             configurable: true,
-            value: externalHtmlEl.querySelector('body'),
+            value: newDoc.body,
         },
     });
+
+    hijackEventAttr([externalHtmlEl], contentWindow)
 
     // Isolate <base> element
     const baseEl = externalHtmlEl.querySelector('base');
@@ -112,7 +115,9 @@ function onIframeReload(option: MicroAppOption, root: MicroAppRoot) {
     const { contentWindow, contentDocument } = root.frameElement;
     if (contentDocument === null) {
         const name = option.id ? ` "${option.id}"` : '';
-        warn(`app${name} lost connection`);
+        const message = `app${name} lost connection`
+        warn(message);
+        alert(message)
         return;
     }
 
