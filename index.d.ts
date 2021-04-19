@@ -30,6 +30,7 @@ declare interface Window {
     ShadowRoot: Function;
     History: Function;
     Node: Function;
+    Function: (...args: string[]) => Function
 }
 
 declare function setAppOption(id: string, option: MicroAppOption, merge?: boolean) 
