@@ -74,9 +74,10 @@ function hijackScriptElements(nodes: (string | Node)[], method: Function, ctx: N
         for (const node of nodes) {
             if (!isObject(node)) continue;
             if ((<Element> node).tagName === 'SCRIPT') {
-                if (SCRIPT_TYPES.includes((<HTMLScriptElement> node).type)) {
-                    newScripts.push(<HTMLScriptElement> node.cloneNode(true));
-                    (<HTMLScriptElement> node).type = 'm;' + (<HTMLScriptElement> node).type;
+                const el = <HTMLScriptElement> node
+                if (SCRIPT_TYPES.includes(el.type)) {
+                    newScripts.push(<HTMLScriptElement> el.cloneNode(true));
+                    el.type = 'm;' + el.type;
                 }
             } else if (ELEMENT_OR_DOCUMENT_FRAGMENT.includes(node.nodeType) && (<Element> node).children.length) {
                 const list = (<Element> node).querySelectorAll('script');
