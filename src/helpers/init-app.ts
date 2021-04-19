@@ -47,12 +47,11 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
         },
     });
 
-    hijackEventAttr([externalHtmlEl], contentWindow)
-
     // Isolate <base> element
+    const internalHtmlEl = contentDocument.documentElement
     const baseEl = externalHtmlEl.querySelector('base');
     if (baseEl) {
-        appendChildTo(contentDocument.firstChild, baseEl);
+        appendChildTo(internalHtmlEl, baseEl);
     }
 
     // Recreate <script> elements
@@ -98,8 +97,7 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
     defineProperty(contentWindow, 'mRoot', { value: root });
     contentWindow.history.replaceState(option.initialState, '', option.initialUrl);
     syncUrlToTopWindow(contentWindow, option);
-
-    const internalHtmlEl = contentDocument.documentElement
+    hijackEventAttr([externalHtmlEl], contentWindow)
     hijackNodeMethodsOfIframe(contentWindow);
     option.beforeReady?.(contentWindow);
     

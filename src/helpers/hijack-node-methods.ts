@@ -119,6 +119,9 @@ function hijackDocument({ document, mRoot }: Window) {
             enumerable: true,
             get: () => mRoot.documentElement,
         },
+        __documentElement: {
+            value: document.documentElement,
+        },
         head: {
             enumerable: true,
             get: () => mRoot.head,

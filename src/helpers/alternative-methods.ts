@@ -93,6 +93,6 @@ function hijackScriptElements(nodes: (string | Node)[], method: Function, ctx: N
     }
     method.apply(ctx, args);
     if (isMicroApp && newScripts.length) {
-        appendTo(root.frameElement.contentDocument.firstChild, ...newScripts);
+        appendTo((<any> root.frameElement.contentDocument).__documentElement, ...newScripts);
     }
 }
