@@ -9,6 +9,7 @@ declare interface MicroAppOption {
     beforeReady?: (win: Window) => void;
     initialUrl?: string;
     initialState?: any;
+    publicPath?: string;
 }
 
 declare interface MicroAppRoot extends ShadowRoot {
@@ -16,9 +17,12 @@ declare interface MicroAppRoot extends ShadowRoot {
     documentElement: HTMLHtmlElement;
     head: HTMLHeadElement;
     body: HTMLBodyElement;
+    host: MicroAppElement;
 }
 
-declare interface MicroAppElement extends HTMLElement {}
+declare interface MicroAppElement extends HTMLElement {
+    _option: MicroAppOption;
+}
 
 declare interface HTMLElement {
     replaceChildren(...nodes: (string | Node)[]): void;

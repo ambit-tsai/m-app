@@ -4,13 +4,13 @@ import { defineProperties } from './helpers/utils';
 
 
 export default class MicroAppElement extends HTMLElement {
-    #option: MicroAppOption;
+    _option: MicroAppOption;
     #root: MicroAppRoot;
 
     connectedCallback() {
         const ctx = this;
         const option = initOption(ctx);
-        ctx.#option = option;
+        ctx._option = option;
         let shadowRoot: MicroAppRoot;
         if (ctx.#root) {
             shadowRoot = ctx.#root;

@@ -75,10 +75,13 @@ function hijackScriptElements(nodes: (string | Node)[], method: Function, ctx: N
             if (!isObject(node)) continue;
             if ((<Element> node).tagName === 'SCRIPT') {
                 const el = <HTMLScriptElement> node
+                modifyAssetPath(el, 'src', root)
                 if (SCRIPT_TYPES.includes(el.type)) {
                     newScripts.push(<HTMLScriptElement> el.cloneNode(true));
                     el.type = 'm;' + el.type;
                 }
+            }if ((<Element> node).tagName === 'LINK') {
+                modifyAssetPath(<Element> node, 'href', root)
             } else if (ELEMENT_OR_DOCUMENT_FRAGMENT.includes(node.nodeType) && (<Element> node).children.length) {
                 const list = (<Element> node).querySelectorAll('script');
                 for (let i = 0, { length } = list; i < length; ++i) {
@@ -94,5 +97,17 @@ function hijackScriptElements(nodes: (string | Node)[], method: Function, ctx: N
     method.apply(ctx, args);
     if (isMicroApp && newScripts.length) {
         appendTo((<any> root.frameElement.contentDocument).__documentElement, ...newScripts);
+    }
+}
+
+
+function modifyAssetPath(el: Element, attr: string, root: MicroAppRoot) {
+    const url = el.getAttribute(attr)
+    if (!url || /^\w+:\/\//.test(url) || url.startsWith('//')) {
+        return
+    }
+    const { publicPath } = root.host._option
+    if (publicPath) {
+        el.setAttribute(attr, publicPath + url)
     }
 }
