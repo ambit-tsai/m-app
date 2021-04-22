@@ -108,6 +108,6 @@ function modifyAssetPath(el: Element, attr: string, root: MicroAppRoot) {
     }
     const { publicPath } = root.host._option
     if (publicPath) {
-        el.setAttribute(attr, publicPath + url)
+        el.setAttribute(attr, new URL(url, publicPath).href)
     }
 }
