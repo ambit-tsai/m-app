@@ -52,6 +52,14 @@ function hijackElement({ HTMLElement }: Window) {
     for (const [key, method] of entries(alternativeMethods)) {
         HTMLElement[PROTOTYPE][key] = method;
     }
+    // FIXME: hijack property 'ownerDocument'
+    defineProperty(HTMLElement[PROTOTYPE], 'ownerDocument', {
+        get() {
+            const root = <MicroAppRoot> this.getRootNode()
+            const isMicroApp = root?.host?.tagName === EL_TAG_NAME
+            return isMicroApp ? root.frameElement.contentDocument : root
+        },
+    })
 }
 
 
