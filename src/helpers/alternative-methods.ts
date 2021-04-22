@@ -19,46 +19,56 @@ export const alternativeMethods: {
     [key: string]: Function
 } = {
     appendChild<T extends Node>(aChild: T): T {
+        const root = <MicroAppRoot> this.getRootNode()
         const nodes = [aChild]
-        hijackEventAttr(nodes)
-        hijackScriptElements([aChild], appendChild, this, nodes);
+        hijackEventAttr(nodes, root)
+        hijackScriptElements([aChild], appendChild, this, nodes, root)
         return aChild;
     },
     insertBefore<T extends Node>(newNode: T, referenceNode: Node): T {
-        hijackEventAttr([newNode])
-        hijackScriptElements([newNode], insertBefore, this, [newNode, referenceNode]);
+        const root = <MicroAppRoot> this.getRootNode()
+        hijackEventAttr([newNode], root)
+        hijackScriptElements([newNode], insertBefore, this, [newNode, referenceNode], root);
         return newNode;
     },
     replaceChild<T extends Node>(newChild: Node, oldChild: T): T {
-        hijackEventAttr([newChild])
-        hijackScriptElements([newChild], replaceChild, this, [newChild, oldChild]);
+        const root = <MicroAppRoot> this.getRootNode()
+        hijackEventAttr([newChild], root)
+        hijackScriptElements([newChild], replaceChild, this, [newChild, oldChild], root)
         return oldChild;
     },
     append(...nodes: (string | Node)[]) {
-        hijackEventAttr(nodes)
-        hijackScriptElements(nodes, append, this, nodes);
+        const root = <MicroAppRoot> this.getRootNode()
+        hijackEventAttr(nodes, root)
+        hijackScriptElements(nodes, append, this, nodes, root)
     },
     prepend(...nodes: (string | Node)[]) {
-        hijackEventAttr(nodes)
-        hijackScriptElements(nodes, prepend, this, nodes);
+        const root = <MicroAppRoot> this.getRootNode()
+        hijackEventAttr(nodes, root)
+        hijackScriptElements(nodes, prepend, this, nodes, root)
     },
     after(...nodes: (string | Node)[]) {
-        hijackEventAttr(nodes)
-        hijackScriptElements(nodes, after, this, nodes);
+        const root = <MicroAppRoot> this.getRootNode()
+        hijackEventAttr(nodes, root)
+        hijackScriptElements(nodes, after, this, nodes, root)
     },
     before(...nodes: (string | Node)[]) {
-        hijackEventAttr(nodes)
-        hijackScriptElements(nodes, before, this, nodes);
+        const root = <MicroAppRoot> this.getRootNode()
+        hijackEventAttr(nodes, root)
+        hijackScriptElements(nodes, before, this, nodes, root)
     },
     replaceWith(...nodes: (string | Node)[]) {
-        hijackEventAttr(nodes)
-        hijackScriptElements(nodes, replaceWith, this, nodes);
+        const root = <MicroAppRoot> this.getRootNode()
+        hijackEventAttr(nodes, root)
+        hijackScriptElements(nodes, replaceWith, this, nodes, root)
     },
 };
 
 if (replaceChildren) {
     alternativeMethods.replaceChildren = function (...nodes: (string | Node)[]) {
-        hijackScriptElements(nodes, replaceChildren, this, nodes);
+        const root = <MicroAppRoot> this.getRootNode()
+        hijackEventAttr(nodes, root)
+        hijackScriptElements(nodes, replaceChildren, this, nodes, root)
     };
 }
 
@@ -66,9 +76,8 @@ if (replaceChildren) {
 const ELEMENT_OR_DOCUMENT_FRAGMENT = [1, 11];
 
 
-function hijackScriptElements(nodes: (string | Node)[], method: Function, ctx: Node, args: unknown[]) {
+function hijackScriptElements(nodes: (string | Node)[], method: Function, ctx: Node, args: unknown[], root: MicroAppRoot) {
     const newScripts: HTMLScriptElement[] = [];
-    const root = <MicroAppRoot> ctx.getRootNode();
     const isMicroApp = root?.host?.tagName === EL_TAG_NAME;
     if (isMicroApp) {
         for (const node of nodes) {

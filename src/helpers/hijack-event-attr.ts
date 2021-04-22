@@ -1,12 +1,10 @@
 
-export function hijackEventAttr(nodes: (string | Node)[] | HTMLCollection, win?: Window) {
-    // FIXME: move "getRootNode" outside to improve performance
+export function hijackEventAttr(nodes: (string | Node)[] | HTMLCollection, root: MicroAppRoot, win?: Window) {
     for (const node of <Node[]> nodes) {
         if (typeof node === 'string' || node.nodeType !== 1) {
             continue
         }
         if (!win) {
-            const root = <MicroAppRoot> node.getRootNode()
             win = root.frameElement?.contentWindow
             if (!win) return    // the node is not under <m-ap>
         }
@@ -20,7 +18,7 @@ export function hijackEventAttr(nodes: (string | Node)[] | HTMLCollection, win?:
             }
         }
         if (el.children.length) {
-            hijackEventAttr(el.children, win)
+            hijackEventAttr(el.children, root, win)
         }
     }
 }

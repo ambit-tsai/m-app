@@ -97,7 +97,7 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
     defineProperty(contentWindow, 'mRoot', { value: root });
     contentWindow.history.replaceState(option.initialState, '', option.initialUrl);
     syncUrlToTopWindow(contentWindow, option);
-    hijackEventAttr([externalHtmlEl], contentWindow)
+    hijackEventAttr([externalHtmlEl], root, contentWindow)
     hijackNodeMethodsOfIframe(contentWindow);
     option.beforeReady?.(contentWindow);
     
@@ -126,6 +126,7 @@ function onIframeReload(option: MicroAppOption, root: MicroAppRoot) {
     defineProperty(contentWindow, 'mRoot', { value: root });
     updateTopWindowUrl(option, contentWindow);
     syncUrlToTopWindow(contentWindow, option);
+    hijackEventAttr([documentElement], root, contentWindow)
     hijackNodeMethodsOfIframe(contentWindow);
     
     requestAnimationFrame(() => {
