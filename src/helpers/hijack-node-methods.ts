@@ -52,12 +52,17 @@ function hijackElement({ HTMLElement }: Window) {
     for (const [key, method] of entries(alternativeMethods)) {
         HTMLElement[PROTOTYPE][key] = method;
     }
-    // FIXME: hijack property 'ownerDocument'
-    defineProperty(HTMLElement[PROTOTYPE], 'ownerDocument', {
-        get() {
-            const root = <MicroAppRoot> this.getRootNode()
-            const isMicroApp = root?.host?.tagName === EL_TAG_NAME
-            return isMicroApp ? root.frameElement.contentDocument : root
+    // Hijack property 'ownerDocument'
+    const desc = Object.getOwnPropertyDescriptor(Node[PROTOTYPE], 'ownerDocument')
+    desc.enumerable = false
+    defineProperties(HTMLElement[PROTOTYPE], {
+        _rawOwnerDoc: desc,
+        ownerDocument: {
+            get() {
+                const root = <MicroAppRoot> this.getRootNode()
+                const isMicroApp = root?.host?.tagName === EL_TAG_NAME
+                return isMicroApp ? root.frameElement.contentDocument : this._rawOwnerDoc
+            },
         },
     })
 }
