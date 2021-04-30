@@ -9,7 +9,7 @@
 
 
 ## 📃 简介
-***m-app*** 将微应用的 DOM 树置于 **Shadow DOM** 中维护，从而实现 DOM 树独立以及 CSS 隔离，而 JavaScript 代码则置于**同源 iframe** 中运行，由 iframe 提供独立的运行环境。
+***&lt;m-app&gt;*** 将微应用的 DOM 树置于 **Shadow DOM** 中维护，从而实现 DOM 树独立以及 CSS 隔离，而 JavaScript 代码则置于**同源 iframe** 中运行，由 iframe 提供独立的运行环境。
 
 <p align="center">
     <img src="https://gitee.com/ambit/m-app/raw/assets/structure.svg" title="感谢王*扬同学的图" width="300px">
@@ -66,7 +66,17 @@ import '@ambit_tsai/m-app';
 更多信息请查看 <a href="https://github.com/ambit-tsai/m-app/wiki" target="_blank">Wiki</a>
 
 
+## 🎉 招聘
+<a href="https://www.gaoding.com/" target="_blank">稿定科技</a>招人啦 👇联系我可内推，或是推荐给需要的朋友
+1. 地点：厦门、深圳、杭州
+1. 职位：**前端**、后端、SRE工程师、产品、测试、UI设计、运营、市场 ...
+1. 福利：双休、弹性上下班、六险一金、餐补、MacBook、人体工学椅、班车、零食供应 ...
+
+*（🔓联系我解锁更多信息）*
+
+
 ## ☎️ 联系
-1. *微信*: ambit_tsai
+1. *微信*: cai_fanwei
+1. *QQ*: 854521460
 1. *QQ群*: 663286147
 1. *邮箱*: ambit_tsai@qq.com
