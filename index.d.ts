@@ -18,6 +18,7 @@ declare interface MicroAppRoot extends ShadowRoot {
     head: HTMLHeadElement;
     body: HTMLBodyElement;
     host: MicroAppElement;
+    document: HTMLElement;
 }
 
 declare interface MicroAppElement extends HTMLElement {

@@ -10,15 +10,25 @@ export async function initApp(option: MicroAppOption, root: MicroAppRoot) {
         const iframe = document.createElement('iframe');
         iframe.src = option.runtimePath;
         iframe.hidden = true;
+        defineProperty(root, 'frameElement', { value: iframe })
+
+        const style = document.createElement('style')
+        iframe.hidden = true;
+        // style.textContent = 'm-document{display:block;height:100%;}' // FIXME: 距离上边缘多出7-8px
+        style.textContent = 'm-document{display:block;position:absolute;top:0;left:0;width:100%;height:100%;}'
+
+        const doc = document.createElement('m-document')
+        defineProperty(root, 'document', { value: doc });
+
         const [ response ] = await Promise.all([
             fetch(option.entry, option.fetchOption),
             new Promise(resolve => {
                 addEventListenerTo(iframe, 'load', resolve, { once: true });
-                appendChildTo(root, iframe);
+                DocumentFragment.prototype.append.call(root, iframe, style, doc)
             }),
         ]);
-        defineProperty(root, 'frameElement', { value: iframe });
         addEventListenerTo(iframe, 'load', () => onIframeReload(option, root));
+
         const htmlText = await response.text();
         initShadowDom(option, root, htmlText);
     } catch (error) {
@@ -102,7 +112,7 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
     option.beforeReady?.(contentWindow);
     
     requestAnimationFrame(() => {
-        appendChildTo(root, externalHtmlEl);
+        appendChildTo(root.document, externalHtmlEl);
         appendTo(internalHtmlEl, ...newScripts);
     });
 }
@@ -133,7 +143,7 @@ function onIframeReload(option: MicroAppOption, root: MicroAppRoot) {
         if (baseEl) {
             appendChildTo(newHtmlEl, baseEl);
         }
-        replaceChild.call(root, documentElement, root.documentElement);
+        replaceChild.call(root.document, documentElement, root.documentElement);
         defineProperties(root, {
             documentElement: { value: documentElement },
             head: { value: head },

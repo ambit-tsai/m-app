@@ -20,6 +20,8 @@ if (!customElements.get(EL_LOCAL_NAME)) {
     appendChildTo(document.head, styleEL);
     
     hijackNodeMethodsOfGlobal();
+
+    customElements.define('m-document', class extends HTMLElement {})
     
     customElements.define(EL_LOCAL_NAME, MicroAppElement);
 }

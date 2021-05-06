@@ -146,8 +146,21 @@ function hijackDocument({ document, mRoot }: Window) {
         exitFullscreen: {
             value: () => document.exitFullscreen(),
         },
+        addEventListener: {
+            // @ts-ignore: refactor later
+            value: (...args) => mRoot.document.addEventListener(...args)
+        },
+        removeEventListener: {
+            // @ts-ignore: refactor later
+            value: (...args) => mRoot.document.removeEventListener(...args)
+        },
     });
 }
+
+
+const eventPropsOfWindow = Object.keys(window).filter(key => key.startsWith('on'))
+const eventPropsOfHTMLElement = Object.keys(HTMLElement.prototype).filter(key => key.startsWith('on'))
+const uniqueEventsOfWindow = eventPropsOfWindow.filter(key => !eventPropsOfHTMLElement.includes(key))
 
 
 function hijackWindow(contentWindow: Window) {
@@ -162,4 +175,31 @@ function hijackWindow(contentWindow: Window) {
     contentWindow.cancelAnimationFrame = (handle: number) => cancelAnimationFrame(handle);
 
     contentWindow.getSelection = () => getSelection();
+
+    // FIXME: 只代理部分事件至 ShadowRoot
+    const {
+        mRoot,
+        addEventListener,
+        removeEventListener,
+        dispatchEvent,
+    } = contentWindow
+    contentWindow.addEventListener = (type, ...args) => {
+        if (uniqueEventsOfWindow.includes(type)) {
+            addEventListener(type, ...<[any]>args)
+        } else {
+            mRoot.addEventListener(type, ...<[any]>args)
+        }
+    }
+    contentWindow.removeEventListener = (type, ...args) => {
+        if (uniqueEventsOfWindow.includes(type)) {
+            removeEventListener(type, ...<[any]>args)
+        } else {
+            mRoot.removeEventListener(type, ...<[any]>args)
+        }
+    }
+    contentWindow.dispatchEvent = event => {
+        return uniqueEventsOfWindow.includes(event?.type)
+            ? dispatchEvent(event)
+            : mRoot.dispatchEvent(event)
+    }
 }

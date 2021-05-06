@@ -1,6 +1,6 @@
 {
   "name": "@ambit_tsai/m-app",
-  "version": "1.0.0-beta.9",
+  "version": "1.0.0-beta.10",
   "description": "A micro app container component, it's as easy as iframe, and beyond the limitation of iframe",
   "author": "Ambit Tsai <ambit_tsai@qq.com>",
   "license": "Apache-2.0",
@@ -11,9 +11,9 @@
     "build:docs": "node ./scripts/build-docs"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.1.1",
     "rollup": "^2.35.1",
     "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
     "tslib": "^2.1.0",
     "typescript": "^4.1.3"
   },
