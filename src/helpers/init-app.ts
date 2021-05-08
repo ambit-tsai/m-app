@@ -13,7 +13,6 @@ export async function initApp(option: MicroAppOption, root: MicroAppRoot) {
         defineProperty(root, 'frameElement', { value: iframe })
 
         const style = document.createElement('style')
-        iframe.hidden = true;
         // style.textContent = 'm-document{display:block;height:100%;}' // FIXME: 距离上边缘多出7-8px
         style.textContent = 'm-document{display:block;position:absolute;top:0;left:0;width:100%;height:100%;}'
 
