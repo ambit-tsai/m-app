@@ -77,6 +77,7 @@ function initShadowDom(option: MicroAppOption, root: MicroAppRoot, htmlText: str
             for (let i = 0, { length } = attributes; i < length; ++i) {
                 newEl.setAttribute(attributes[i].name, attributes[i].value);
             }
+            el.type = 'm;' + el.type
             newScripts.push(newEl);
             if (newEl.defer) {
                 deferScripts.push(newEl);
