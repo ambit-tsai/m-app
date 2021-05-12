@@ -1,5 +1,5 @@
 {
     "editor.tabSize": 4,
-    "files.eol": "\r\n",
+    "files.eol": "\n",
     "files.encoding": "utf8"
 }
