@@ -27,5 +27,11 @@ module.exports = {
         'arrow-parens': ['error', 'as-needed'],
         'no-confusing-arrow': 'off',
         'no-return-assign': ['error', 'except-parens'],
+        'import/prefer-default-export': 'off',
+        'no-restricted-syntax': 'off',
+        'import/extensions': ['error', {
+            '.ts': 'never',
+        }],
+        'import/no-unresolved': 'off',
     },
 }
